@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts, slugifyTag } from '../../lib/posts';
+
+const posts = await getPosts();
+const counts = new Map<string, number>();
+for (const p of posts) for (const t of p.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+
+<Base title="Tags" description="Browse posts by topic.">
+  <h1 class="rise">Tags</h1>
+  {
+    tags.length ? (
+      <ul class="tags">
+        {tags.map(([tag, n], i) => (
+          <li class="rise" style={`--i: ${i + 1}`}>
+            <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
+              #{tag} <span class="count">{n}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="muted">No tags yet.</p>
+    )
+  }
+</Base>
+
+<style>
+  .tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .tags .tag {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.85rem;
+  }
+  .count {
+    opacity: 0.6;
+    margin-left: 0.2rem;
+  }
+</style>

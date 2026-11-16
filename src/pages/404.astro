@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Not found">
+  <div class="wrap">
+    <p class="code rise">404</p>
+    <h1 class="rise" style="--i: 1">This page wandered off.</h1>
+    <p class="muted rise" style="--i: 2">Probably one of the projects I never finished.</p>
+    <a class="link rise" style="--i: 3" href="/">← Back to all posts</a>
+  </div>
+</Base>
+
+<style>
+  .wrap {
+    text-align: center;
+    padding: 4rem 0;
+  }
+  .code {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0 0 1rem;
+    color: var(--accent);
+  }
+  .link {
+    display: inline-block;
+  }
+</style>

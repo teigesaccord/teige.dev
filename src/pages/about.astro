@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { SOCIAL } from '../consts';
+---
+
+<Base title="About" description="Who I am and why this blog exists.">
+  <h1 class="rise">About</h1>
+  <div class="prose">
+    <p class="rise" style="--i: 1">
+      Hi, I'm Teige, a software engineer in Philadelphia. I work across the full stack (React, Django,
+      Python, PostgreSQL, AWS) and spend a lot of my free time starting projects: games, 3D prints,
+      home-lab tooling, and whatever else catches my attention.
+    </p>
+    <p class="rise" style="--i: 2">
+      This blog is where I write them up: what I was trying to do, the decisions I made, what broke,
+      and what I'd do differently next time.
+    </p>
+    <p class="rise" style="--i: 3">
+      You can find my code on <a href={SOCIAL.github}>GitHub</a> or connect with me on
+      <a href={SOCIAL.linkedin}>LinkedIn</a>.
+    </p>
+
+    <h2 data-reveal>About this site</h2>
+    <p data-reveal>
+      Built with <a href="https://astro.build">Astro</a>. The <strong>Aa</strong> button in the header
+      switches between three typefaces chosen for readability: Lexend, OpenDyslexic, and Atkinson
+      Hyperlegible. Your choice is remembered. Animations are turned off automatically if your system
+      is set to reduce motion.
+    </p>
+  </div>
+</Base>

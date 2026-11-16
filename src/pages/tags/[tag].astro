@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts, slugifyTag } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const byTag = new Map<string, { name: string; posts: CollectionEntry<'blog'>[] }>();
+  for (const post of posts) {
+    for (const name of post.data.tags) {
+      const slug = slugifyTag(name);
+      if (!byTag.has(slug)) byTag.set(slug, { name, posts: [] });
+      byTag.get(slug)!.posts.push(post);
+    }
+  }
+  return [...byTag.entries()].map(([tag, v]) => ({ params: { tag }, props: v }));
+}
+
+interface Props {
+  name: string;
+  posts: CollectionEntry<'blog'>[];
+}
+const { name, posts } = Astro.props;
+---
+
+<Base title={`#${name}`} description={`Posts tagged ${name}.`}>
+  <a href="/tags/" class="back muted rise">← All tags</a>
+  <h1 class="rise" style="--i: 1">#{name}</h1>
+  <p class="muted rise" style="--i: 2">{posts.length} post{posts.length === 1 ? '' : 's'}</p>
+  <PostList posts={posts} offset={3} />
+</Base>
+
+<style>
+  .back {
+    display: inline-block;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+  .back:hover {
+    color: var(--accent);
+  }
+  h1 {
+    margin-bottom: 0.25rem;
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+import { AUTHOR, SOCIAL } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="inner">
+    <span>© {year} {AUTHOR}</span>
+    <span class="links">
+      <a class="link" href={SOCIAL.github} rel="me">GitHub</a>
+      <a class="link" href={SOCIAL.linkedin} rel="me">LinkedIn</a>
+      <a class="link" href="/rss.xml">RSS</a>
+    </span>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .inner {
+    max-width: calc(var(--measure) + 3rem);
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .links {
+    display: flex;
+    gap: 1rem;
+  }
+</style>

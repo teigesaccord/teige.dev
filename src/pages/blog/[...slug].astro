@@ -1,0 +1,199 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { getPosts, readingTime, slugifyTag } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  newer?: CollectionEntry<'blog'>;
+  older?: CollectionEntry<'blog'>;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, tags, repo, demo, status } = post.data;
+const minutes = readingTime(post.body);
+---
+
+<Base title={title} description={description} type="article">
+  <div class="progress" aria-hidden="true"></div>
+
+  <article>
+    <header class="post-header">
+      <a href="/" class="back muted rise" style="--i: 0">← All posts</a>
+      <h1 transition:name={`title-${post.id}`}>{title}</h1>
+      <div class="meta muted rise" style="--i: 1">
+        <FormattedDate date={pubDate} />
+        <span aria-hidden="true">·</span>
+        <span>{minutes} min read</span>
+        {
+          updatedDate && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                Updated <FormattedDate date={updatedDate} />
+              </span>
+            </>
+          )
+        }
+        {status && (<><span aria-hidden="true">·</span><span class="status">{status.replace('-', ' ')}</span></>)}
+      </div>
+
+      {
+        (tags.length > 0 || repo || demo) && (
+          <div class="chips rise" style="--i: 2">
+            {tags.map((t) => (
+              <a class="tag" href={`/tags/${slugifyTag(t)}/`}>
+                #{t}
+              </a>
+            ))}
+            {repo && (
+              <a class="link small" href={repo}>
+                Source ↗
+              </a>
+            )}
+            {demo && (
+              <a class="link small" href={demo}>
+                Live demo ↗
+              </a>
+            )}
+          </div>
+        )
+      }
+    </header>
+
+    <div class="prose rise" style="--i: 3">
+      <Content />
+    </div>
+  </article>
+
+  {
+    (newer || older) && (
+      <nav class="pager" aria-label="More posts" data-reveal>
+        {older ? (
+          <a href={`/blog/${older.id}/`} class="pager-link">
+            <span class="muted">← Older</span>
+            <span>{older.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )}
+        {newer && (
+          <a href={`/blog/${newer.id}/`} class="pager-link right">
+            <span class="muted">Newer →</span>
+            <span>{newer.data.title}</span>
+          </a>
+        )}
+      </nav>
+    )
+  }
+</Base>
+
+<style>
+  .post-header {
+    margin-bottom: 2.5rem;
+  }
+  .back {
+    display: inline-block;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+    transition:
+      color 200ms var(--ease),
+      transform 300ms var(--ease);
+  }
+  .back:hover {
+    color: var(--accent);
+    transform: translateX(-4px);
+  }
+  h1 {
+    font-size: clamp(1.9rem, 5vw, 2.5rem);
+    margin-bottom: 0.75rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+  }
+  .status {
+    text-transform: capitalize;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-top: 1rem;
+  }
+  .small {
+    font-size: 0.82rem;
+  }
+
+  .prose :global(h2) {
+    scroll-margin-top: 5rem;
+  }
+  .prose :global(li) {
+    margin-bottom: 0.35em;
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    font-size: 0.92rem;
+    transition: background-color 250ms var(--ease);
+  }
+  .pager-link:hover {
+    background: var(--bg-soft);
+  }
+  .pager-link .muted {
+    font-size: 0.78rem;
+  }
+  .right {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  /* Reading progress bar — pure CSS scroll-driven animation where supported */
+  .progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: var(--accent);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    z-index: 20;
+    display: none;
+  }
+  @supports (animation-timeline: scroll()) {
+    .progress {
+      display: block;
+      animation: progress linear both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes progress {
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+</style>
