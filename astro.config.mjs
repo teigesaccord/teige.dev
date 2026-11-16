@@ -5,8 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: change to your real domain before deploying (used for RSS + sitemap + canonical URLs)
-  site: 'https://example.com',
+  site: 'https://teige.dev',
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {
