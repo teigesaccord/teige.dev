@@ -100,4 +100,4 @@ The lesson for me: "readable without color" is easy to write in a spec and easy 
 - **Streaks and stats**, kept in the browser like everything else.
 - **Difficulty tiers**, once I work out how to grade a puzzle by the techniques it needs, rather than just its size.
 
-Go [fishing!](https://teige.dev/fishdoku/).
+Go [fishing!](https://teige.dev/fishdoku/)
