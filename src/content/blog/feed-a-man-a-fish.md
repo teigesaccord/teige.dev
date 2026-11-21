@@ -1,6 +1,6 @@
 ---
 title: 'Feed a man a fish'
-description: 'Fishdoku: an daily logic puzzle made of ASCII fish, built spec-first with OpenSpec, and redesigned so a colorblind player (me) could actually play it.'
+description: 'Fishdoku: a daily logic puzzle made of ASCII fish, built spec-first with OpenSpec, and redesigned so a colorblind player (me) could actually play it.'
 pubDate: 2026-11-20
 tags: ['fishdoku', 'game', 'openspec', 'accessibility']
 repo: 'https://github.com/teigesaccord/fishdoku'
@@ -100,4 +100,4 @@ The lesson for me: "readable without color" is easy to write in a spec and easy 
 - **Streaks and stats**, kept in the browser like everything else.
 - **Difficulty tiers**, once I work out how to grade a puzzle by the techniques it needs, rather than just its size.
 
-Go [fishing!](https://teige.dev/fishdoku/)
+Lets go [fishing!](https://teige.dev/fishdoku/)
